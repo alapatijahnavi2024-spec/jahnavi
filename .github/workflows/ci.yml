@@ -1,7 +1,6 @@
-```yaml
 name: CI/CD Pipeline
 
-on:
+"on":
   push:
     branches:
       - master
@@ -42,6 +41,7 @@ jobs:
 
   deploy:
     needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
@@ -56,4 +56,3 @@ jobs:
         with:
           name: mediflow-release
           path: mediflow-release.zip
-```
