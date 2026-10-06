@@ -1,5 +1,4 @@
-```yaml
-name: CI/CD Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -8,10 +7,6 @@ on:
   pull_request:
     branches:
       - master
-
-permissions:
-  contents: read
-  id-token: write
 
 jobs:
   test:
@@ -43,22 +38,3 @@ jobs:
       - name: Build check
         working-directory: backend
         run: npm run build --if-present
-
-  deploy:
-    needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v5
-        with:
-          role-to-assume: arn:aws:iam::348517221025:role/GitHubActions-MediFlow-Deploy
-          aws-region: us-east-1
-
-      - name: Deploy frontend to S3
-        run: aws s3 sync frontend/ s3://mediflow-jahnavi-2026/ --delete
-```
