@@ -1,4 +1,5 @@
-name: CI Pipeline
+```yaml
+name: CI/CD Pipeline
 
 on:
   push:
@@ -38,7 +39,8 @@ jobs:
       - name: Build check
         working-directory: backend
         run: npm run build --if-present
-          deploy:
+
+  deploy:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
@@ -50,9 +52,10 @@ jobs:
       - name: Create deployment package
         run: |
           zip -r mediflow-release.zip frontend backend README.md
-          
-      - name: Upload deployment package
+
+      - name: Upload deployment artifact
         uses: actions/upload-artifact@v4
         with:
           name: mediflow-release
           path: mediflow-release.zip
+```
